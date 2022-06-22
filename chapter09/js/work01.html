@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>work01</title>
+<script src="https://pixijs.download/v6.4.0/pixi.min.js"></script>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<script>
+// PixiJSアプリ作成
+let app = new PIXI.Application({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    backgroundColor: 0x330066,
+});
+document.body.appendChild(app.view);
+
+// コンテナ作成
+const container = new PIXI.Container();
+// アプリにコンテナ追加
+app.stage.addChild(container);
+
+//
+const particles = [];
+// 
+const textures = [];
+
+// テキスチャー読み込み
+for( let i = 0; i < 9; i++) {
+    textures.push(PIXI.Texture.from(`./../assets/images/particle${i}.png`));
+}
+
+class Particle {
+    constructor() {
+        const index = getRandomNumber(0, textures.length -1);
+        this.sprite = new PIXI.Sprite(textures[index]);
+        this.sprite.scale.x = 1;
+        this.sprite.scale.y = 1;
+        this.velocity = {x: 0, y: 0};
+        this.screenWidth = window.innerWidth;
+        this.screenHeight = window.innerHeight;
+    }
+    
+    init() {
+        let x = getRandomNumber(10, this.screenWidth -10);
+        let y = this.screenHeight;
+        this.setPosition({x, y});
+        x = getRandomNumber(-1, 1);
+        x = 0;
+        y = getRandomNumber(-5, -4);
+        this.setVelocity({x, y});
+        this.toExplode = true;
+        this.explodeHeight = getRandomNumber(0, this.screenHeight / 2);
+    }
+    
+    update() {
+        this.sprite.position.x += this.velocity.x;
+        this.sprite.position.y += this.velocity.y;
+        // もしも到達点に達したら
+        if (this.toExplode && !this.exploded) {
+            // 爆発
+            if (this.sprite.position.y < this.explodeHeight ) {
+                this.sprite.alpha = 0;
+                this.exploded = true;
+                this.explode(this.sprite.position);
+            }
+        }
+        
+        if (this.fade) {
+            this.sprite.alpha -= 0.01;
+        }
+    }
+    
+    setPosition(position) {
+        this.sprite.position.x = position.x;
+        this.sprite.position.y = position.y;
+    }
+  
+    setVelocity(velocity) {
+        this.velocity = velocity;
+    }
+    
+    explode (position) {
+        const steps = 10;
+        const radius = 4;
+        for (var i = 0; i < steps; i++) {
+            const x = radius * Math.cos(2 * Math.PI * i / steps);
+            const y = radius * Math.sin(2 * Math.PI * i / steps);
+            // 追加
+            const particle = new Particle();
+            particle.fade = true;
+            particle.setPosition(position);
+            particle.setVelocity({x, y});
+            container.addChild(particle.sprite);
+            particles.push(particle);
+        }
+    }
+}
+
+const launchParticle = () => {
+    const particle = new Particle();
+    particle.init();
+    container.addChild(particle.sprite);
+    particles.push(particle);
+};
+
+for( let i = 0; i < 10; i++ ) {
+    launchParticle();
+}
+
+app.ticker.add(() => {
+  for (var i = 0, l = particles.length; i < l; i++) {
+    particles[i].update();  
+  }
+});
+
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+</script>
+</body>
+</html>
