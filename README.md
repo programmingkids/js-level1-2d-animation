@@ -1,4 +1,4 @@
-# JavaScript レベル1
+# JavaScript レベル1 2Dアニメーション
 ## 対象
 未経験者
 
