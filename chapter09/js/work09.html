@@ -29,31 +29,7 @@ body {
 <body>
 <div id="container"></div>
 <script>
-const width = window.innerWidth;
-const height = window.innerHeight;
-
-const total = 30;
-const container = document.getElementById("container");
-
-for ( let i = 0; i < total; i++ ) {
-    const divTag = document.createElement('div');
-    TweenLite.set(divTag,{
-        attr : {class : 'item'},
-        x : getRandomNumber(0, width),
-        y : getRandomNumber(-200, -150),
-        z : getRandomNumber(-200, 200),
-    });
-    const image = getRandomNumber(1, 8);
-    divTag.style.backgroundImage = 'url(./../assets/images/heart' + image + '.png)';
-    
-    const w = getRandomNumber(20, 100);
-    const h = getRandomNumber(20, 100);
-    divTag.style.width = w + 'px';
-    divTag.style.height = h + 'px';
-    animation(divTag);
-    container.appendChild(divTag);
-}
- 
+// アニメーションの関数
 function animation( element ) {
     TweenMax.to(element,getRandomNumber(6,15),{
         y:height+100,
@@ -78,8 +54,34 @@ function animation( element ) {
     });
 }
 
+// 乱数を作成する関数
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+var total = 30;
+var container = document.getElementById("container");
+
+for ( var i = 0; i < total; i++ ) {
+    var divTag = document.createElement('div');
+    TweenLite.set(divTag,{
+        attr : {class : 'item'},
+        x : getRandomNumber(0, width),
+        y : getRandomNumber(-200, -150),
+        z : getRandomNumber(-200, 200),
+    });
+    var image = getRandomNumber(1, 8);
+    divTag.style.backgroundImage = 'url(./../assets/images/heart' + image + '.png)';
+    
+    var w = getRandomNumber(20, 100);
+    var h = getRandomNumber(20, 100);
+    divTag.style.width = w + 'px';
+    divTag.style.height = h + 'px';
+    animation(divTag);
+    container.appendChild(divTag);
 }
 </script>
 </body>
