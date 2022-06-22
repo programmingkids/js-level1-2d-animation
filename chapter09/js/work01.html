@@ -17,45 +17,23 @@ html, body {
 </head>
 <body>
 <script>
-// PixiJSアプリ作成
-let app = new PIXI.Application({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    backgroundColor: 0x330066,
-});
-document.body.appendChild(app.view);
-
-// コンテナ作成
-const container = new PIXI.Container();
-// アプリにコンテナ追加
-app.stage.addChild(container);
-
-//
-const particles = [];
-// 
-const textures = [];
-
-// テキスチャー読み込み
-for( let i = 0; i < 9; i++) {
-    textures.push(PIXI.Texture.from(`./../assets/images/particle${i}.png`));
-}
-
-class Particle {
+// 花火のクラス
+class Firework {
     constructor() {
-        const index = getRandomNumber(0, textures.length -1);
-        this.sprite = new PIXI.Sprite(textures[index]);
+        const index = getRandomNumber(0, images.length - 1);
+        this.sprite = new PIXI.Sprite(images[index]);
         this.sprite.scale.x = 1;
         this.sprite.scale.y = 1;
         this.velocity = {x: 0, y: 0};
         this.screenWidth = window.innerWidth;
         this.screenHeight = window.innerHeight;
+        this.fade = false;
     }
     
     init() {
-        let x = getRandomNumber(10, this.screenWidth -10);
-        let y = this.screenHeight;
+        var x = getRandomNumber(10, this.screenWidth - 10);
+        var y = this.screenHeight;
         this.setPosition({x, y});
-        x = getRandomNumber(-1, 1);
         x = 0;
         y = getRandomNumber(-5, -4);
         this.setVelocity({x, y});
@@ -91,42 +69,69 @@ class Particle {
     }
     
     explode (position) {
-        const steps = 10;
-        const radius = 4;
+        var steps = 10;
+        var radius = 4;
         for (var i = 0; i < steps; i++) {
-            const x = radius * Math.cos(2 * Math.PI * i / steps);
-            const y = radius * Math.sin(2 * Math.PI * i / steps);
+            var x = radius * Math.cos(2 * Math.PI * i / steps);
+            var y = radius * Math.sin(2 * Math.PI * i / steps);
             // 追加
-            const particle = new Particle();
-            particle.fade = true;
-            particle.setPosition(position);
-            particle.setVelocity({x, y});
-            container.addChild(particle.sprite);
-            particles.push(particle);
+            var miniFire = new Firework();
+            miniFire.fade = true;
+            miniFire.setPosition(position);
+            miniFire.setVelocity({x, y});
+            container.addChild(miniFire.sprite);
+            fireworks.push(miniFire);
         }
     }
 }
 
-const launchParticle = () => {
-    const particle = new Particle();
-    particle.init();
-    container.addChild(particle.sprite);
-    particles.push(particle);
-};
-
-for( let i = 0; i < 10; i++ ) {
-    launchParticle();
-}
-
-app.ticker.add(() => {
-  for (var i = 0, l = particles.length; i < l; i++) {
-    particles[i].update();  
-  }
-});
-
+// 乱数を作成する関数
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+// 花火を作成する関数
+function createFirework() {
+    var fw = new Firework();
+    fw.init();
+    container.addChild(fw.sprite);
+    fireworks.push(fw);
+}
+
+// 花火の配列
+var fireworks = [];
+// 画像の配列
+var images = [];
+
+// 画像読み込み
+for( var i = 0; i < 9; i++) {
+    images.push(PIXI.Texture.from(`./../assets/images/particle${i}.png`));
+}
+
+// PixiJSアプリ作成
+var app = new PIXI.Application({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    backgroundColor: 0x330066,
+});
+document.body.appendChild(app.view);
+
+// コンテナ作成
+var container = new PIXI.Container();
+// アプリにコンテナ追加
+app.stage.addChild(container);
+
+// 10個の花火を作成する
+for( var i = 0; i < 10; i++ ) {
+    createFirework();
+}
+
+// アニメーション開始
+app.ticker.add(function() {
+  for (var i = 0, l = fireworks.length; i < l; i++) {
+    fireworks[i].update();  
+  }
+});
 </script>
 </body>
 </html>
