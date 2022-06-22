@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>work07</title>
+<title>work05</title>
 <script src="//cdn.jsdelivr.net/npm/phaser@3.50.0/dist/phaser.js"></script>
 <style>
 * {
@@ -15,7 +15,7 @@ html, body {
 }
 </style>
 <script>
-const mainScene = new Phaser.Scene('MainScene');
+var mainScene = new Phaser.Scene('MainScene');
 
 mainScene.preload = function() {
     // スプライト画像の読み込み
@@ -88,7 +88,7 @@ mainScene.createParticle2 = function() {
 };
 
 
-const config = {
+var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
@@ -102,7 +102,7 @@ const config = {
     scene: [mainScene],
 };
 
-const game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
 
 window.addEventListener("resize", (event) => {
     game.scale.resize(window.innerWidth, window.innerHeight);
