@@ -76,10 +76,11 @@ class Firework {
     explode (position) {
         var number = 10;
         var velocity = 3;
-        for (var i = 0; i < number; i++) {
+        for (var i = 1; i <= number; i++) {
             // 飛び散る方向の座標を計算
-            var x = Math.cos(2 * Math.PI * i / number) * velocity;
-            var y = Math.sin(2 * Math.PI * i / number) * velocity;
+            var angle = (i * (360 / number)) / 360;
+            var x = Math.cos(2 * Math.PI * angle) * velocity;
+            var y = Math.sin(2 * Math.PI * angle) * velocity;
             // 花火の追加
             var miniFire = new Firework();
             miniFire.setPosition(position);
